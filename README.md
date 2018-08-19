@@ -27,7 +27,7 @@ param(
 See [Schedule a Task](https://technet.microsoft.com/en-us/library/cc748993(v=ws.11).aspx) page for more details
 
 Example one-line command:
-`schtasks.exe /Create /SC DAILY /MO 1 /TN "Terraform Updater" /TR "powershell \path\to\script\get-latest-terraform.ps1 -tf_path 'path\to\where\terraform\is' -tf_arch 'amd64'" /ST 12:00 /F`
+`schtasks.exe /Create /SC DAILY /MO 1 /TN "Terraform Updater" /TR "powershell \path\to\script\install_terraform.ps1 -tf_path 'path\to\where\terraform\is' -tf_arch 'amd64'" /ST 12:00 /F`
 
 * \[`/SC DAILY`\]: Run daily
 * \[`/MO 1`\]: Every Day
