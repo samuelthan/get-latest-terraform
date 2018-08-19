@@ -1,37 +1,46 @@
-﻿<#
+<#
 .SYNOPSIS
 	Script to auto-update terraform to latest version
-
 .DESCRIPTION
 	Script will scrape "https://api.github.com/repos/hashicorp/terraform/releases/latest" for latest terraform version
 	If local version does not match the remote version, it will download and replace terraform with latest version
 	Script gets the current version by running "terraform version".
-
 .PARAMETER tf_path
 	Specify the path where terraform.exe is located.
-	Ex: $tf_path = "C:\tools"
-
+	Ex: $tf_path = "C:\Terraform"
 .PARAMETER tf_arch
 	Specify the System Architecture.
 	Allowed values:
 		amd64 - For 64-bit systems
 		386 - For 32-bit systems
-
 	ex: $tf_arch = "amd64"
-
 .LINK
 	https://releases.hashicorp.com/terraform/$($LATEST_RELEASE)/terraform_$($LATEST_RELEASE)_windows_$($tf_arch).zip
 	https://api.github.com/repos/hashicorp/terraform/releases/latest
+    
+ 
+.NOTES
+    Version: 1.1
+    
+    Creation Date: 18 Nov 2017
+    
+    Purpose/Change: 
+        version 1.0 - Original
+        Version 1.1 - Added environment path settings. 
+
+    Author:    Samuel Than
+    Original Author: https://github.com/pvicol/get-latest-terraform
+
 
 #>
 
 # Set parameters
 param(
 	# Terraform path
-	[string] $tf_path = "",
+	[string] $tf_path = "C:\Terraform",
 
 	# Terraform Arch to be downloaded
-	[string] $tf_arch = ""
+	[string] $tf_arch = "amd64"
 )
 
 $tf_release_url = "https://api.github.com/repos/hashicorp/terraform/releases/latest"
@@ -66,6 +75,8 @@ function get_latest_tf_version() {
 	.LINK
 		https://api.github.com/repos/hashicorp/terraform/releases/latest
 	#>
+
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 	# Get web content and convert from JSON
 	$web_content = Invoke-WebRequest -Uri $tf_release_url -UseBasicParsing |	ConvertFrom-Json
@@ -127,3 +138,13 @@ else {
 	Write-Host "Current tf version: $(get_cur_tf_version)"
 	Write-Host "Latest tf Version: $(get_latest_tf_version)"
 }
+
+
+## Get the PATH environmental Variable
+$Path=(Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).Path
+
+## Create New PATH environmental Variable
+$NewPath=$Path+";"+$tf_path
+
+## Set the New PATH environmental Variable
+Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH –Value $NewPath
