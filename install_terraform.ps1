@@ -125,8 +125,8 @@ if (-not (Test-Path ($tf_path + "terraform.exe"))){
 # Check if current version is different than latest version
 elseif ((get_latest_tf_version) -ne (get_cur_tf_version)) {
 	# Write basic info to sceen
-	Write-Host "Current tf version: $(get_cur_tf_version)"
-	Write-Host "Latest tf Version: $(get_latest_tf_version)"
+	Write-Host "Current Terraform version: $(get_cur_tf_version)"
+	Write-Host "Latest Terraform Version: $(get_latest_tf_version)"
 	Write-Host
 	get_terraform
 }
@@ -135,8 +135,8 @@ elseif ((get_latest_tf_version) -ne (get_cur_tf_version)) {
 else {
 	Write-Host "Latest Terraform already installed."
 	Write-Host
-	Write-Host "Current tf version: $(get_cur_tf_version)"
-	Write-Host "Latest tf Version: $(get_latest_tf_version)"
+	Write-Host "Current Terraform version: $(get_cur_tf_version)"
+	Write-Host "Latest Terraform Version: $(get_latest_tf_version)"
 }
 
 
